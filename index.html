@@ -4,6 +4,55 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Sonic AI CopyX — AI-powered gold copy trading via Tag Markets. Two account types: 12X and 24X. Automated, transparent, and 100% regulated. Join free today." />
+
+  <!-- ─── SEO META ─── -->
+  <meta name="keywords" content="copy trading, gold trading, XAU/USD, AI trading, Tag Markets, 12X account, 24X account, automated trading, forex copy trading" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://sonicaicopyx.com/" />
+
+  <!-- ─── FAVICON ─── -->
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+
+  <!-- ─── OPEN GRAPH ─── -->
+  <meta property="og:title" content="Sonic AI CopyX | AI-Powered Gold Copy Trading" />
+  <meta property="og:description" content="Copy expert gold trades automatically with AI. Two account types — 12X and 24X. Start from just $10 on Tag Markets." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/og-image.svg" />
+  <meta property="og:url" content="https://sonicaicopyx.com/" />
+  <meta property="og:site_name" content="Sonic AI CopyX" />
+
+  <!-- ─── TWITTER CARD ─── -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sonic AI CopyX | AI-Powered Gold Copy Trading" />
+  <meta name="twitter:description" content="Copy expert gold trades automatically with AI. Start from just $10 on Tag Markets. 180K+ active copiers." />
+  <meta name="twitter:image" content="assets/og-image.svg" />
+
+  <!-- ─── JSON-LD STRUCTURED DATA ─── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Sonic AI CopyX",
+    "url": "https://sonicaicopyx.com/",
+    "description": "AI-powered gold copy trading via Tag Markets. Two account types — 12X and 24X. Automated, transparent, and fully regulated.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "url": "https://t.me/sonicexperts"
+    }
+  }
+  </script>
+
+  <!-- ─── GOOGLE ANALYTICS 4 ─── -->
+  <!-- Replace with your GA4 ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+
   <title>Sonic AI CopyX | AI-Powered Gold Copy Trading</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,10 +61,33 @@
 </head>
 <body>
 
+  <!-- ─── STICKY CTA BAR ─── -->
+  <div class="sticky-cta" id="stickyCta">
+    <div class="sticky-cta__inner container">
+      <span class="sticky-cta__text">Start copy trading gold from just <strong>$10</strong></span>
+      <div class="sticky-cta__actions">
+        <a href="https://t.me/sonicexperts" target="_blank" rel="noopener noreferrer" class="btn btn--tg btn--sm">Telegram</a>
+        <a href="#" class="btn btn--gold btn--sm js-register-link">Join Free</a>
+      </div>
+    </div>
+  </div>
+
   <!-- ─── RISK BANNER ─── -->
   <div class="risk-banner">
     ⚠️ <strong>Risk Warning:</strong> Trading financial instruments involves significant risk. Capital is at risk. Past performance is not a guarantee of future results. Only invest what you can afford to lose.
     <button class="risk-banner__close" id="closeBanner" aria-label="Close">✕</button>
+  </div>
+
+  <!-- ─── COUNTDOWN BAR ─── -->
+  <div class="countdown-bar" id="countdownBar">
+    <span class="countdown-bar__label">⏱ Trading week ends in:</span>
+    <div class="countdown-digits">
+      <span id="cdDays">00</span><em>d</em>
+      <span id="cdHours">00</span><em>h</em>
+      <span id="cdMins">00</span><em>m</em>
+      <span id="cdSecs">00</span><em>s</em>
+    </div>
+    <span class="countdown-bar__suffix">— next profit share incoming</span>
   </div>
 
   <!-- ─── NAV ─── -->
@@ -36,6 +108,7 @@
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#get-started" class="btn btn--gold btn--sm js-register-link">Join Free</a></li>
       </ul>
+      <button class="lang-btn" id="langToggle">HR / EN</button>
     </div>
   </nav>
 
@@ -91,12 +164,12 @@
 
       <div class="hero__stats">
         <div class="stat">
-          <span class="stat__value gold-text">$10</span>
+          <span class="stat__value gold-text" data-target="10" data-prefix="$">$10</span>
           <span class="stat__label">Min. Deposit</span>
         </div>
         <div class="stat__divider"></div>
         <div class="stat">
-          <span class="stat__value gold-text">180K+</span>
+          <span class="stat__value gold-text" data-target="180" data-suffix="K+">180K+</span>
           <span class="stat__label">Active Copiers</span>
         </div>
         <div class="stat__divider"></div>
@@ -409,8 +482,75 @@
     </div>
   </section>
 
+  <!-- ─── TESTIMONIALS ─── -->
+  <section class="section" id="testimonials">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Community Voices</span>
+        <h2>What Traders Are <span class="gold-text">Saying</span></h2>
+        <p>Real experiences from the Sonic AI CopyX community. Results vary — always trade responsibly.</p>
+      </div>
+      <div class="testimonial-grid">
+
+        <div class="testimonial-card reveal">
+          <div class="testimonial-card__stars">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <blockquote class="testimonial-card__quote">
+            "Another absolutely amazing week! 3.29% on 12X and 6.58% on 24X — reinvesting everything, this is how wealth is built."
+          </blockquote>
+          <div class="testimonial-card__author">
+            <strong>E.K.</strong>
+            <span>Balkan community member</span>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal">
+          <div class="testimonial-card__stars">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <blockquote class="testimonial-card__quote">
+            "Started with just $50, reinvested every week for 2 months. My balance has more than doubled. The AI really works."
+          </blockquote>
+          <div class="testimonial-card__author">
+            <strong>M.P.</strong>
+            <span>Copy trader</span>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal">
+          <div class="testimonial-card__stars">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <blockquote class="testimonial-card__quote">
+            "I was sceptical at first. But three weeks in, I can see the trades being copied live on Tag Markets. Transparent and real."
+          </blockquote>
+          <div class="testimonial-card__author">
+            <strong>D.T.</strong>
+            <span>Copy trader</span>
+          </div>
+        </div>
+
+        <div class="testimonial-card testimonial-card--team reveal">
+          <div class="testimonial-card__stars">
+            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+          </div>
+          <blockquote class="testimonial-card__quote">
+            "We currently think it's going to be the best month since existence. The setups are already lined up."
+          </blockquote>
+          <div class="testimonial-card__author">
+            <strong>Sonic AI CopyX Team</strong>
+            <span>Official Telegram update</span>
+          </div>
+        </div>
+
+      </div>
+      <p class="testimonial-disclaimer">*Testimonials reflect individual experiences. Past performance and community results do not guarantee future returns. Capital at risk.</p>
+    </div>
+  </section>
+
   <!-- ─── WHY GOLD ─── -->
-  <section class="section" id="why-gold">
+  <section class="section section--dark" id="why-gold">
     <div class="container">
       <div class="section__header">
         <span class="section__tag">Safe-Haven Asset</span>
@@ -443,7 +583,7 @@
   </section>
 
   <!-- ─── FEATURES ─── -->
-  <section class="section section--dark" id="features">
+  <section class="section" id="features">
     <div class="container">
       <div class="section__header">
         <span class="section__tag">Platform Advantages</span>
@@ -492,7 +632,7 @@
   </section>
 
   <!-- ─── PLATFORM ─── -->
-  <section class="section" id="platform">
+  <section class="section section--dark" id="platform">
     <div class="container">
       <div class="platform-wrap">
         <div class="platform-text reveal">
@@ -549,6 +689,68 @@
             </div>
           </div>
           <a href="#" class="btn btn--gold btn--full js-register-link">Open Account Free</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CALCULATOR ─── -->
+  <section class="section" id="calculator">
+    <div class="container">
+      <div class="section__header">
+        <span class="section__tag">Growth Projector</span>
+        <h2>Calculate Your <span class="gold-text">Potential Growth</span></h2>
+        <p>Enter your starting amount and see how reinvestment can grow your balance over time. Illustrative only — not a guarantee.</p>
+      </div>
+      <div class="calc-wrap">
+        <div class="calc-inputs reveal">
+          <div class="calc-input-group">
+            <label for="calcAmount">Starting Amount</label>
+            <div class="calc-input-prefix">
+              <span class="calc-prefix">$</span>
+              <input type="number" id="calcAmount" value="100" min="10" step="10" />
+            </div>
+          </div>
+          <div class="calc-input-group">
+            <label for="calcType">Account Type</label>
+            <select id="calcType">
+              <option value="0.03">12X Account (avg ~3% weekly)</option>
+              <option value="0.05" selected>24X Account (avg ~5% weekly)</option>
+            </select>
+          </div>
+          <div class="calc-input-group">
+            <label for="calcWeeks">Number of Weeks: <strong id="calcWeeksLabel">12</strong></label>
+            <input type="range" id="calcWeeks" min="1" max="52" value="12" />
+            <div class="calc-range-labels"><span>1 week</span><span>52 weeks</span></div>
+          </div>
+        </div>
+        <div class="calc-output reveal">
+          <div class="calc-output__header">
+            <span class="calc-output__label">Projected Final Balance</span>
+            <span class="calc-output__value gold-text" id="calcFinalBalance">$179.59</span>
+          </div>
+          <div class="calc-output__profit">
+            <span>Total Profit:</span>
+            <span class="green" id="calcTotalProfit">+$79.59</span>
+          </div>
+          <div class="calc-output__growth">
+            <span>Total Growth:</span>
+            <span class="gold-text" id="calcTotalGrowth">+79.6%</span>
+          </div>
+          <div class="calc-table-wrap">
+            <table class="calc-table">
+              <thead>
+                <tr>
+                  <th>Week</th>
+                  <th>Balance</th>
+                  <th>Gain</th>
+                </tr>
+              </thead>
+              <tbody id="calcTableBody">
+              </tbody>
+            </table>
+          </div>
+          <p class="calc-disclaimer">These projections are illustrative only, based on example weekly return rates. Actual results vary. Past performance does not guarantee future results. Capital at risk.</p>
         </div>
       </div>
     </div>
@@ -696,8 +898,24 @@
                   Telegram Community
                 </a>
               </li>
+              <li><a href="privacy.html">Privacy Policy</a></li>
             </ul>
           </div>
+        </div>
+      </div>
+
+      <!-- ─── CONTACT ─── -->
+      <div class="footer__contact">
+        <p class="footer__contact-heading">Have a question? Reach out directly.</p>
+        <div class="footer__contact-btns">
+          <a href="mailto:ktrakostanec@gmail.com" class="btn btn--ghost btn--sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            ktrakostanec@gmail.com
+          </a>
+          <a href="https://t.me/sonicexperts" target="_blank" rel="noopener noreferrer" class="btn btn--tg btn--sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
+            Telegram
+          </a>
         </div>
       </div>
 
@@ -746,6 +964,17 @@
     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z"/></svg>
     <span class="tg-float__label">Community</span>
   </a>
+
+  <!-- ─── COOKIE CONSENT ─── -->
+  <div class="cookie-banner" id="cookieBanner">
+    <div class="cookie-banner__inner">
+      <p>🍪 We use cookies to improve your experience and analyse site traffic. By continuing, you agree to our <a href="privacy.html">Privacy Policy</a>.</p>
+      <div class="cookie-banner__btns">
+        <button class="btn btn--ghost btn--sm" id="cookieDecline">Decline</button>
+        <button class="btn btn--gold btn--sm" id="cookieAccept">Accept</button>
+      </div>
+    </div>
+  </div>
 
   <!-- QR code library -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"
