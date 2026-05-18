@@ -1,7 +1,6 @@
 /* ─── RISK BANNER ─── */
 .risk-banner {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 200;
   background: #1a0e00;
   border-bottom: 1px solid rgba(212,160,23,.3);
@@ -131,7 +130,7 @@ p  { color: var(--muted); font-size: .97rem; }
 .nav {
   position: fixed;
   top: 0; left: 0; right: 0;
-  z-index: 100;
+  z-index: 250;
   padding: 16px 0;
   transition: background var(--transition), box-shadow var(--transition);
 }
@@ -1198,7 +1197,7 @@ p  { color: var(--muted); font-size: .97rem; }
   color: var(--gold-light);
   text-align: center;
   position: sticky;
-  top: 0;
+  top: 60px;
   z-index: 199;
 }
 .countdown-bar__label { font-weight: 600; color: var(--muted); }
@@ -1228,7 +1227,7 @@ p  { color: var(--muted); font-size: .97rem; }
   margin-right: 4px;
 }
 @media (max-width: 600px) {
-  .countdown-bar { gap: 8px; font-size: .76rem; }
+  .countdown-bar { gap: 8px; font-size: .76rem; top: 56px; }
   .countdown-bar__suffix { display: none; }
 }
 
