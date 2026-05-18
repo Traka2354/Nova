@@ -1049,6 +1049,91 @@ p  { color: var(--muted); font-size: .97rem; }
 }
 .footer__bottom p { font-size: .78rem; }
 
+/* ─── TELEGRAM BUTTON ─── */
+.btn--tg {
+  background: #229ED9;
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(34,158,217,.35);
+}
+.btn--tg:hover { filter: brightness(1.12); transform: translateY(-1px); box-shadow: 0 8px 28px rgba(34,158,217,.5); }
+
+/* ─── TELEGRAM JOIN CARD ─── */
+.tg-join-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  max-width: 720px;
+  margin: 0 auto 40px;
+  padding: 28px 32px;
+  background: rgba(34,158,217,.07);
+  border: 1px solid rgba(34,158,217,.25);
+  border-radius: var(--radius);
+  flex-wrap: wrap;
+}
+.tg-join-card__icon {
+  width: 60px; height: 60px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #229ED9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(34,158,217,.4);
+}
+.tg-join-card__text { flex: 1; min-width: 200px; }
+.tg-join-card__text h3 { color: var(--text); margin-bottom: 6px; font-size: 1.1rem; }
+.tg-join-card__text p  { font-size: .88rem; line-height: 1.6; }
+.tg-join-card__text strong { color: var(--gold-light); }
+
+/* ─── URL CHIP TELEGRAM ─── */
+.url-chip--tg {
+  background: rgba(34,158,217,.08);
+  border-color: rgba(34,158,217,.25);
+  text-decoration: none;
+  transition: background var(--transition);
+}
+.url-chip--tg:hover { background: rgba(34,158,217,.16); }
+.url-chip--tg .url-chip__label { color: #229ED9; }
+.url-chip--tg code { color: var(--text); }
+
+/* ─── FOOTER TELEGRAM LINK ─── */
+.footer__tg-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #229ED9 !important;
+}
+.footer__tg-link:hover { color: #5bb8e8 !important; }
+
+/* ─── FLOATING TELEGRAM BUTTON ─── */
+.tg-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #229ED9;
+  color: #fff;
+  border-radius: 99px;
+  font-weight: 700;
+  font-size: .88rem;
+  text-decoration: none;
+  box-shadow: 0 4px 24px rgba(34,158,217,.45);
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+}
+.tg-float:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(34,158,217,.6); background: #1a8bbf; }
+.tg-float__label { white-space: nowrap; }
+
+@media (max-width: 480px) {
+  .tg-float__label { display: none; }
+  .tg-float { padding: 14px; border-radius: 50%; bottom: 20px; right: 20px; }
+  .tg-join-card { flex-direction: column; align-items: flex-start; }
+}
+
 /* ─── REVEAL ANIMATION ─── */
 .reveal {
   opacity: 0;
