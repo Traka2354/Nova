@@ -135,10 +135,13 @@ p  { color: var(--muted); font-size: .97rem; }
   top: 0; left: 0; right: 0;
   z-index: 250;
   padding: 16px 0;
+  background: rgba(10,10,11,.97);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 1px 0 var(--border);
   transition: background var(--transition), box-shadow var(--transition);
 }
 .nav.scrolled {
-  background: rgba(10,10,11,.92);
+  background: rgba(10,10,11,.97);
   backdrop-filter: blur(14px);
   box-shadow: 0 1px 0 var(--border);
 }
@@ -1188,7 +1191,7 @@ p  { color: var(--muted); font-size: .97rem; }
 
 /* ─── COUNTDOWN BAR ─── */
 .countdown-bar {
-  background: linear-gradient(90deg, rgba(139,105,20,.25) 0%, rgba(212,160,23,.18) 50%, rgba(139,105,20,.25) 100%);
+  background: #130e00;
   border-bottom: 1px solid rgba(212,160,23,.3);
   padding: 10px 20px;
   display: flex;
