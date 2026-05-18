@@ -770,7 +770,14 @@
         <div class="qr-card qr-card--large">
           <div class="qr-card__label">Partner Registration — AITECH Portal</div>
           <div class="qr-wrap">
-            <canvas id="qrCanvas1"></canvas>
+            <!-- QR generated via Google Charts API — works without JavaScript -->
+            <img
+              src="https://chart.googleapis.com/chart?cht=qr&chs=220x220&chl=https%3A%2F%2Faitech.ibportal.io%2Fauth%2Fregister%3Fe%3DuxHzQEHidtHpyg4rd8YcgfCM0lROvpn4lGFvQU8bvEI%26a%3D1&choe=UTF-8"
+              alt="QR code — scan to register"
+              width="220" height="220"
+              id="qrCanvas1"
+              style="border-radius:8px;"
+            />
           </div>
           <p class="qr-card__sub">Scan with your phone camera to register</p>
           <a href="#" class="btn btn--gold btn--full js-register-link">

@@ -77,8 +77,8 @@ function generateQR(canvasId, url) {
   const canvas = document.getElementById(canvasId);
   if (!canvas || typeof QRCode === 'undefined') return;
   QRCode.toCanvas(canvas, url, {
-    width:            220,
-    margin:           2,
+    width: 220,
+    margin: 2,
     color: { dark: '#000000', light: '#ffffff' },
     errorCorrectionLevel: 'H',
   }, (err) => { if (err) console.error('QR error:', err); });
@@ -86,17 +86,19 @@ function generateQR(canvasId, url) {
 
 function initQRCodes() {
   generateQR('qrCanvas1', PARTNER_URL);
-  generateQR('qrCanvas2', PARTNER_URL);
-  // Wire up buttons to the real URL
   document.querySelectorAll('.js-register-link').forEach(el => {
     el.setAttribute('href', PARTNER_URL);
   });
 }
 
+/* Try immediately, on custom event, and on window load — covers all timing cases */
 if (typeof QRCode !== 'undefined') {
   initQRCodes();
 } else {
   document.addEventListener('qrlib-ready', initQRCodes);
+  window.addEventListener('load', () => {
+    if (typeof QRCode !== 'undefined') initQRCodes();
+  });
 }
 
 /* ─── FAQ ─── */
