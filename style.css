@@ -437,6 +437,140 @@ p  { color: var(--muted); font-size: .97rem; }
   line-height: 1.6;
 }
 
+/* ─── HERO MIN DEPOSIT LINE ─── */
+.hero__min-deposit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: .82rem;
+  color: var(--muted);
+  margin-top: -8px;
+}
+.hero__min-deposit strong { color: var(--gold-light); }
+.hero__min-deposit svg   { color: #4ade80; }
+
+/* ─── ACCOUNT CARD MIN DEPOSIT ─── */
+.account-card__min {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(212,160,23,.07);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.account-card__min-label { font-size: .78rem; color: var(--muted); }
+.account-card__min-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold-light);
+}
+
+/* ─── SOCIAL PROOF BAR ─── */
+.social-proof-bar {
+  background: linear-gradient(90deg, rgba(212,160,23,.08) 0%, rgba(212,160,23,.14) 50%, rgba(212,160,23,.08) 100%);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0;
+}
+.social-proof-bar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+.social-proof-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 40px;
+  text-align: center;
+}
+.social-proof-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--gold-light);
+  line-height: 1;
+}
+.social-proof-label { font-size: .82rem; color: var(--muted); max-width: 200px; }
+.social-proof-divider { width: 1px; height: 48px; background: var(--border); }
+
+/* ─── COMPOUND GROWTH SECTION ─── */
+.compound-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.compound-text { display: flex; flex-direction: column; gap: 28px; }
+.compound-point { display: flex; gap: 16px; align-items: flex-start; }
+.compound-point__icon { font-size: 1.6rem; flex-shrink: 0; }
+.compound-point h4 { color: var(--text); margin-bottom: 6px; }
+.compound-point p  { font-size: .9rem; line-height: 1.65; }
+
+.compound-table-wrap {
+  background: var(--dark2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.compound-table-header {
+  padding: 16px 20px;
+  background: rgba(212,160,23,.07);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.compound-table-header span { font-size: .88rem; font-weight: 700; color: var(--text); }
+.compound-table-note { font-size: .72rem !important; color: var(--muted) !important; font-weight: 400 !important; }
+
+.compound-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .88rem;
+}
+.compound-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+.compound-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  color: var(--text);
+}
+.compound-table tr:last-child td { border-bottom: none; }
+.compound-table__highlight { background: rgba(212,160,23,.06); }
+.compound-table__highlight td { font-weight: 700; }
+.green  { color: #4ade80; font-weight: 600; }
+.bold   { font-weight: 800; }
+
+.compound-table__disclaimer {
+  padding: 12px 16px;
+  font-size: .7rem;
+  color: var(--muted);
+  line-height: 1.5;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 900px) {
+  .compound-wrap { grid-template-columns: 1fr; }
+  .social-proof-divider { display: none; }
+  .social-proof-item { padding: 12px 20px; }
+}
+
 /* ─── PERFORMANCE CARDS ─── */
 .perf-grid {
   display: grid;
