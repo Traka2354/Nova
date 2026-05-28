@@ -19,7 +19,17 @@ MT5 naloga na tvoj nalog.
 - **Risk** (`risk.py`) — TP 1–3% i SL 0.5–1% **od ukupnog balansa** uz
   **auto-skaliranje lota**: SL se postavlja na ATR (volatilnost) razdaljinu, a
   veličina pozicije se računa tako da taj SL gubi tačno SL% balansa (TP onda
-  donosi TP% balansa). Plus dnevni limit gubitka i max broj pozicija.
+  donosi TP% balansa).
+- **Zaštita kapitala — „misli kao trejder"**:
+  - **Trailing stop + break-even** (`trade_manager.py`) — čim trejd ode u plus,
+    SL ide na ulaz pa prati cenu; dobitak se ne vraća u gubitak.
+  - **Filteri ulaska** (`filters.py`) — preskače ulaz kad je spred prevelik i
+    trguje samo u likvidnim satima (UTC), ne vikendom.
+  - **Circuit breakeri** (`guards.py`) — dnevni limit gubitka, dnevni profit
+    target (poknjiži dan), pauza posle X uzastopnih gubitaka, i cooldown posle
+    gubitka (anti-revenge trading).
+  - **AI stav** — analitičar je podešen konzervativno: default „hold", ulaz samo
+    uz poklapanje više faktora i povoljan risk/reward.
 - **Copy trading** (`copier.py`) — kopira pozicije sa MASTER naloga (tudji
   signali, npr. preko investor/read-only logina) na tvoj nalog.
 - **Backtest** (`backtest.py`) — test deterministickog dela strategije na
@@ -92,6 +102,9 @@ gold-ai-bot/
 ├── research/
 │   ├── news.py          # opcione vesti (RSS)
 │   └── ai_analyst.py    # Claude API: web research + strukturisana odluka
+├── trade_manager.py     # trailing stop + break-even na otvorenim pozicijama
+├── filters.py           # filteri ulaska (spread, sati, vikend)
+├── guards.py            # circuit breakeri (dnevni limit/target, cooldown)
 ├── copier.py            # copy trading master -> slave
 ├── bot.py               # glavna petlja
 ├── backtest.py          # backtest skelet

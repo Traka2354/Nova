@@ -13,7 +13,10 @@ import time
 
 import config
 import copier
+import filters
 import risk
+import trade_manager
+from guards import RiskGuard
 from mt5_client import MT5Client
 from research import ai_analyst, news
 
@@ -40,33 +43,23 @@ _setup_logging()
 log = logging.getLogger("bot")
 
 
-class DailyGuard:
-    """Prati dnevni gubitak i blokira trgovanje ako se predje limit."""
-
-    def __init__(self) -> None:
-        self.day = _dt.date.today()
-        self.start_balance: float | None = None
-
-    def check(self, client: MT5Client, max_daily_loss_pct: float) -> bool:
-        today = _dt.date.today()
-        if today != self.day or self.start_balance is None:
-            self.day = today
-            self.start_balance = client.account_balance()
-        equity = client.account_equity()
-        loss = (self.start_balance - equity) / self.start_balance if self.start_balance else 0.0
-        if loss >= max_daily_loss_pct:
-            log.warning("Dnevni limit gubitka dostignut (%.1f%%). Trgovanje pauzirano.", loss * 100)
-            return False
-        return True
-
-
-def maybe_trade(client: MT5Client, cfg: config.Config) -> None:
+def maybe_trade(
+    client: MT5Client,
+    cfg: config.Config,
+    highs: list[float],
+    lows: list[float],
+    closes: list[float],
+    atr_value: float | None,
+) -> None:
     open_positions = [p for p in client.positions(cfg.symbol)]
     if len(open_positions) >= cfg.risk.max_open_positions:
         log.info("Dostignut max broj pozicija (%s). Cekam.", cfg.risk.max_open_positions)
         return
 
-    highs, lows, closes = client.recent_rates(cfg.symbol, "M15", 100)
+    if not filters.within_hours(_dt.datetime.utcnow(), cfg.filters):
+        log.info("Van sati trgovanja (UTC). Bez novih ulazaka.")
+        return
+
     technical = risk.technical_summary(closes)
     headlines = news.fetch_headlines() if cfg.ai.web_research else []
 
@@ -93,10 +86,13 @@ def maybe_trade(client: MT5Client, cfg: config.Config) -> None:
     balance = client.account_balance()
     sym = client.symbol_info(cfg.symbol)
     tick = client.tick(cfg.symbol)
-    entry = tick.ask if signal.direction == "buy" else tick.bid
 
-    a = risk.atr(highs, lows, closes, cfg.risk.atr_period)
-    sl_distance = a * cfg.risk.atr_sl_mult if a else entry * cfg.risk.sl_fallback_pct
+    if not filters.spread_ok(tick.ask, tick.bid, cfg.filters.max_spread):
+        log.info("Spread prevelik (%.2f). Preskacem ulaz.", tick.ask - tick.bid)
+        return
+
+    entry = tick.ask if signal.direction == "buy" else tick.bid
+    sl_distance = atr_value * cfg.risk.atr_sl_mult if atr_value else entry * cfg.risk.sl_fallback_pct
     plan = risk.plan_trade(sym, signal.direction, entry, balance, cfg.risk, signal.confidence, sl_distance)
 
     client.open_market(
@@ -105,6 +101,7 @@ def maybe_trade(client: MT5Client, cfg: config.Config) -> None:
         volume=plan.volume,
         sl=plan.sl_price,
         tp=plan.tp_price,
+        magic=cfg.risk.bot_magic,
         comment="ai-signal",
     )
     log.info(
@@ -124,7 +121,7 @@ def main() -> None:
 
     client = MT5Client()
     client.connect(cfg.account.login, cfg.account.password, cfg.account.server, cfg.account.path)
-    guard = DailyGuard()
+    guard = RiskGuard()
 
     try:
         while True:
@@ -134,8 +131,15 @@ def main() -> None:
                 # vrati se na moj nalog (copier ostavlja konekciju na slave-u)
                 client.connect(cfg.account.login, cfg.account.password, cfg.account.server, cfg.account.path)
 
-                if guard.check(client, cfg.risk.max_daily_loss_pct):
-                    maybe_trade(client, cfg)
+                highs, lows, closes = client.recent_rates(cfg.symbol, "M15", 100)
+                atr_value = risk.atr(highs, lows, closes, cfg.risk.atr_period)
+
+                # uvek upravljaj otvorenim pozicijama (trailing/break-even)
+                trade_manager.manage(client, cfg, atr_value)
+
+                # nove ulaske dozvoli samo ako zastite to dozvoljavaju
+                if guard.can_open(client, cfg):
+                    maybe_trade(client, cfg, highs, lows, closes, atr_value)
             except Exception as e:  # noqa: BLE001 - petlja mora da prezivi gresku
                 log.exception("Greska u ciklusu: %s", e)
             time.sleep(cfg.poll_interval_sec)

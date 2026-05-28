@@ -56,6 +56,31 @@ class RiskParams:
     atr_sl_mult: float       # SL razdaljina = atr_sl_mult * ATR
     sl_fallback_pct: float   # ako ATR nije dostupan: SL razdaljina = pct * cena
     max_lot: float           # gornji limit velicine pozicije (zastita)
+    bot_magic: int           # magic broj za pozicije koje otvara AI (radi upravljanja)
+
+
+@dataclass
+class Trailing:
+    enabled: bool
+    be_atr_mult: float       # pomeri SL na ulaz (break-even) kad profit >= be_atr_mult*ATR
+    trail_start_mult: float  # pocni trailing kad profit >= trail_start_mult*ATR
+    trail_atr_mult: float    # SL prati cenu na razdaljini trail_atr_mult*ATR
+    fallback_pct: float      # ako ATR nije dostupan: razdaljine = pct*cena
+
+
+@dataclass
+class Filters:
+    max_spread: float        # max dozvoljen spread (u ceni); 0 = iskljuceno
+    start_hour: int          # pocetak trgovanja (UTC); start==end => 24h
+    end_hour: int            # kraj trgovanja (UTC)
+    allow_weekend: bool
+
+
+@dataclass
+class Guards:
+    daily_profit_pct: float  # kad equity poraste za toliko za dan -> stani (poknjizi dan)
+    max_consec_losses: int   # posle toliko uzastopnih gubitaka -> pauza do kraja dana
+    cooldown_min: int        # posle gubitka saceka toliko minuta pre novog ulaza
 
 
 @dataclass
@@ -80,6 +105,9 @@ class Config:
     account: Account
     symbol: str
     risk: RiskParams
+    trailing: Trailing
+    filters: Filters
+    guards: Guards
     ai: AIConfig
     copy: CopyConfig
     poll_interval_sec: int
@@ -123,6 +151,25 @@ def load() -> Config:
             atr_sl_mult=_f("ATR_SL_MULT", 1.5),
             sl_fallback_pct=_f("SL_FALLBACK_PCT", 0.005),
             max_lot=_f("MAX_LOT", 1.0),
+            bot_magic=_i("BOT_MAGIC", 770077),
+        ),
+        trailing=Trailing(
+            enabled=_b("TRAILING_ENABLED", True),
+            be_atr_mult=_f("BE_ATR_MULT", 1.0),
+            trail_start_mult=_f("TRAIL_START_MULT", 1.5),
+            trail_atr_mult=_f("TRAIL_ATR_MULT", 1.0),
+            fallback_pct=_f("TRAIL_FALLBACK_PCT", 0.004),
+        ),
+        filters=Filters(
+            max_spread=_f("MAX_SPREAD", 0.80),
+            start_hour=_i("TRADE_START_HOUR", 7),
+            end_hour=_i("TRADE_END_HOUR", 21),
+            allow_weekend=_b("TRADE_WEEKENDS", False),
+        ),
+        guards=Guards(
+            daily_profit_pct=_f("DAILY_PROFIT_TARGET_PCT", 0.05),
+            max_consec_losses=_i("MAX_CONSEC_LOSSES", 3),
+            cooldown_min=_i("COOLDOWN_MIN", 30),
         ),
         ai=AIConfig(
             enabled=_b("AI_ENABLED", True),

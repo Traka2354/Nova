@@ -6,6 +6,7 @@ projekta (config, risk, backtest) mogao razvijati i na Mac/Linux.
 """
 from __future__ import annotations
 
+import datetime as _dt
 import logging
 from dataclasses import dataclass
 
@@ -111,6 +112,21 @@ class MT5Client:
             )
         return out
 
+    def closed_deals(self, magic: int, symbol: str | None, since: _dt.datetime):
+        """Zatvarajuci dealovi (vreme, profit) za dati magic, hronoloski."""
+        deals = self.mt5.history_deals_get(since, _dt.datetime.now())
+        out: list[tuple[_dt.datetime, float]] = []
+        for d in deals or []:
+            if d.entry != self.mt5.DEAL_ENTRY_OUT:
+                continue
+            if magic and d.magic != magic:
+                continue
+            if symbol and d.symbol != symbol:
+                continue
+            out.append((_dt.datetime.fromtimestamp(d.time), float(d.profit)))
+        out.sort(key=lambda x: x[0])
+        return out
+
     def recent_closes(self, symbol: str, timeframe: str = "M15", count: int = 100):
         """Lista zatvarajucih cena (najstarija -> najnovija) za indikatore."""
         tf = getattr(self.mt5, f"TIMEFRAME_{timeframe}")
@@ -194,4 +210,18 @@ class MT5Client:
         if result is None or result.retcode != self.mt5.TRADE_RETCODE_DONE:
             raise RuntimeError(f"Zatvaranje pozicije neuspesno: {getattr(result, 'comment', result)}")
         log.info("Zatvorena pozicija #%s", pos.ticket)
+        return result
+
+    def modify_sl_tp(self, pos: Position, sl: float, tp: float):
+        request = {
+            "action": self.mt5.TRADE_ACTION_SLTP,
+            "symbol": pos.symbol,
+            "position": pos.ticket,
+            "sl": float(sl),
+            "tp": float(tp),
+            "magic": pos.magic,
+        }
+        result = self.mt5.order_send(request)
+        if result is None or result.retcode != self.mt5.TRADE_RETCODE_DONE:
+            raise RuntimeError(f"Izmena SL/TP neuspesna: {getattr(result, 'comment', result)}")
         return result
