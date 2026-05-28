@@ -28,6 +28,11 @@ MT5 naloga na tvoj nalog.
   - **Circuit breakeri** (`guards.py`) — dnevni limit gubitka, dnevni profit
     target (poknjiži dan), pauza posle X uzastopnih gubitaka, i cooldown posle
     gubitka (anti-revenge trading).
+  - **Tvrda zaštita ukupnog drawdown-a (za 12X / funded nalog)** — pošto te
+    broker izbacuje na ~10%, bot staje sa rezervom (default −6%), zatvori sve
+    pozicije i ostane zaustavljen do kraja dana. Baza se pamti u
+    `logs/guard_state.json` (preživljava restart VPS-a). Za 12X postavi
+    `ACCOUNT_BASELINE` na pojačani iznos.
   - **AI stav** — analitičar je podešen konzervativno: default „hold", ulaz samo
     uz poklapanje više faktora i povoljan risk/reward.
 - **Copy trading** (`copier.py`) — kopira pozicije sa MASTER naloga (tudji

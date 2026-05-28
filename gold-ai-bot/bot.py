@@ -111,6 +111,18 @@ def maybe_trade(
     )
 
 
+def _flatten(client: MT5Client, cfg: config.Config) -> None:
+    """Zatvori sve pozicije na simbolu - zastita naloga pri tvrdom stopu."""
+    positions = client.positions(cfg.symbol)
+    for p in positions:
+        try:
+            client.close_position(p)
+        except Exception as e:  # noqa: BLE001
+            log.error("Ne mogu da zatvorim #%s: %s", p.ticket, e)
+    if positions:
+        log.warning("Zatvoreno %s pozicija (tvrdi stop / zastita naloga).", len(positions))
+
+
 def main() -> None:
     cfg = config.load()
     log.info("Pokrecem Gold AI Bot | mode=%s | simbol=%s", cfg.mode, cfg.symbol)
@@ -126,10 +138,19 @@ def main() -> None:
     try:
         while True:
             try:
-                # copy trading: uskladi master -> moj nalog
-                copier.sync(client, cfg.account, cfg.copy, cfg.symbol)
-                # vrati se na moj nalog (copier ostavlja konekciju na slave-u)
+                # osiguraj da smo na svom nalogu pre procene
                 client.connect(cfg.account.login, cfg.account.password, cfg.account.server, cfg.account.path)
+                state = guard.assess(client, cfg)
+
+                if state.halt:
+                    # tvrdi stop (probijen ukupni DD): cuvaj nalog
+                    if cfg.guards.drawdown_flatten:
+                        _flatten(client, cfg)
+                    # ne sinhronizuj copier dok smo zaustavljeni (da se ne reotvara)
+                else:
+                    copier.sync(client, cfg.account, cfg.copy, cfg.symbol)
+                    # copier ostavlja konekciju na masteru -> vrati se na moj nalog
+                    client.connect(cfg.account.login, cfg.account.password, cfg.account.server, cfg.account.path)
 
                 highs, lows, closes = client.recent_rates(cfg.symbol, "M15", 100)
                 atr_value = risk.atr(highs, lows, closes, cfg.risk.atr_period)
@@ -138,7 +159,7 @@ def main() -> None:
                 trade_manager.manage(client, cfg, atr_value)
 
                 # nove ulaske dozvoli samo ako zastite to dozvoljavaju
-                if guard.can_open(client, cfg):
+                if state.can_open:
                     maybe_trade(client, cfg, highs, lows, closes, atr_value)
             except Exception as e:  # noqa: BLE001 - petlja mora da prezivi gresku
                 log.exception("Greska u ciklusu: %s", e)

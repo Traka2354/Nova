@@ -78,9 +78,13 @@ class Filters:
 
 @dataclass
 class Guards:
-    daily_profit_pct: float  # kad equity poraste za toliko za dan -> stani (poknjizi dan)
-    max_consec_losses: int   # posle toliko uzastopnih gubitaka -> pauza do kraja dana
-    cooldown_min: int        # posle gubitka saceka toliko minuta pre novog ulaza
+    daily_profit_pct: float        # dnevni profit cilj -> stani i poknjizi dan
+    max_consec_losses: int         # posle toliko uzastopnih gubitaka -> pauza do kraja dana
+    cooldown_min: int              # posle gubitka saceka toliko minuta pre novog ulaza
+    max_total_drawdown_pct: float  # tvrda granica ukupnog pada (za 12X/funded nalog)
+    account_baseline: float        # pocetni balans naloga za merenje DD; 0 = auto-detekcija
+    drawdown_trailing: bool        # DD se meri od pika (True) ili od pocetnog balansa (False)
+    drawdown_flatten: bool         # pri probijanju DD: zatvori sve pozicije
 
 
 @dataclass
@@ -170,6 +174,10 @@ def load() -> Config:
             daily_profit_pct=_f("DAILY_PROFIT_TARGET_PCT", 0.05),
             max_consec_losses=_i("MAX_CONSEC_LOSSES", 3),
             cooldown_min=_i("COOLDOWN_MIN", 30),
+            max_total_drawdown_pct=_f("MAX_TOTAL_DRAWDOWN_PCT", 0.06),
+            account_baseline=_f("ACCOUNT_BASELINE", 0.0),
+            drawdown_trailing=_b("DRAWDOWN_TRAILING", False),
+            drawdown_flatten=_b("DRAWDOWN_FLATTEN", True),
         ),
         ai=AIConfig(
             enabled=_b("AI_ENABLED", True),
