@@ -26,7 +26,8 @@ from mt5_client import MT5Client
 
 log = logging.getLogger("guard")
 
-_STATE_FILE = "logs/guard_state.json"
+# STATE_DIR omogucava vise instanci bota (npr. 12X-zastita i copy/AI) bez sukoba
+_STATE_FILE = os.path.join(os.getenv("STATE_DIR", "logs"), "guard_state.json")
 
 
 @dataclass

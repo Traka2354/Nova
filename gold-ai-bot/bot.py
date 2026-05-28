@@ -22,8 +22,9 @@ from research import ai_analyst, news
 
 
 def _setup_logging() -> None:
-    """Log na konzolu i u rotirajuci fajl logs/bot.log (za VPS nadzor)."""
-    os.makedirs("logs", exist_ok=True)
+    """Log na konzolu i u rotirajuci fajl (za VPS nadzor)."""
+    state_dir = os.getenv("STATE_DIR", "logs")
+    os.makedirs(state_dir, exist_ok=True)
     level = os.getenv("LOG_LEVEL", "INFO").upper()
     fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
     root = logging.getLogger()
@@ -32,7 +33,7 @@ def _setup_logging() -> None:
     console = logging.StreamHandler()
     console.setFormatter(fmt)
     rotating = logging.handlers.RotatingFileHandler(
-        "logs/bot.log", maxBytes=5_000_000, backupCount=5, encoding="utf-8"
+        os.path.join(state_dir, "bot.log"), maxBytes=5_000_000, backupCount=5, encoding="utf-8"
     )
     rotating.setFormatter(fmt)
     root.addHandler(console)
