@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import datetime as _dt
 import logging
+import logging.handlers
+import os
 import time
 
 import config
@@ -15,10 +17,26 @@ import risk
 from mt5_client import MT5Client
 from research import ai_analyst, news
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-)
+
+def _setup_logging() -> None:
+    """Log na konzolu i u rotirajuci fajl logs/bot.log (za VPS nadzor)."""
+    os.makedirs("logs", exist_ok=True)
+    level = os.getenv("LOG_LEVEL", "INFO").upper()
+    fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+    root = logging.getLogger()
+    root.setLevel(level)
+    root.handlers.clear()
+    console = logging.StreamHandler()
+    console.setFormatter(fmt)
+    rotating = logging.handlers.RotatingFileHandler(
+        "logs/bot.log", maxBytes=5_000_000, backupCount=5, encoding="utf-8"
+    )
+    rotating.setFormatter(fmt)
+    root.addHandler(console)
+    root.addHandler(rotating)
+
+
+_setup_logging()
 log = logging.getLogger("bot")
 
 

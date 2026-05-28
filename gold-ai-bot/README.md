@@ -45,6 +45,34 @@ python bot.py        # zivi bot (demo ili live, prema ACCOUNT_MODE)
 python backtest.py   # backtest deterministicke strategije
 ```
 
+## VPS deployment (Windows) — preporuceno za 24/5 rad
+
+Bot mora da radi non-stop, a laptop se uspava/zatvara — zato ide na **Windows
+VPS**. (MT5 Python paket radi samo na Windows-u.)
+
+**Koji VPS:** Windows Server 2019/2022, ~2 vCPU / 4 GB RAM je dovoljno. Po
+mogucstvu **blizu broker servera** (cesto London ili New York) radi nize
+latencije. Bilo koji "Windows VPS" ili "Forex VPS" provajder je u redu.
+
+**Koraci:**
+1. Poveži se na VPS preko **RDP** (Remote Desktop).
+2. Instaliraj **Python 3.11+** (obavezno obeleži *Add Python to PATH*).
+3. Instaliraj **MT5 terminal** od svog brokera, uloguj se na nalog, pa:
+   *Tools → Options → Expert Advisors* → dozvoli, i uključi dugme **AutoTrading**.
+   Dodaj `XAUUSD` u Market Watch.
+4. Kopiraj `gold-ai-bot` folder na VPS (npr. preko git-a ili RDP copy/paste).
+5. Pokreni **`setup.bat`** (napravi `.venv`, instalira pakete, kreira `.env`).
+6. Popuni **`.env`** (MT5 podaci, `ANTHROPIC_API_KEY`).
+7. Pokreni **`run.bat`** — bot radi i sam se restartuje ako padne.
+
+**Da nastavi da radi i kad zatvoriš RDP:** samo zatvori RDP prozor (ne
+"Log off") — sesija ostaje aktivna. Logovi su u `logs/bot.log`.
+
+**Da prezivi i restart VPS-a** (jedna opcija):
+- *Task Scheduler* → novi task → *Run whether user is logged on or not* →
+  *At log on* → akcija: pokreni `run.bat`. Podesi i MT5 da se sam pokrece.
+- Ili instaliraj kao Windows servis preko **NSSM** (`nssm install GoldAIBot`).
+
 ## Bezbednost
 
 - Prvo testiraj na **demo** nalogu. AI ne garantuje profit — trziste je
@@ -67,6 +95,8 @@ gold-ai-bot/
 ├── copier.py            # copy trading master -> slave
 ├── bot.py               # glavna petlja
 ├── backtest.py          # backtest skelet
+├── setup.bat            # jednokratni setup na Windows VPS-u
+├── run.bat              # pokretanje sa auto-restartom
 ├── requirements.txt
 └── .env.example
 ```
