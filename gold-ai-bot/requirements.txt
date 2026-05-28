@@ -1,0 +1,5 @@
+# MetaTrader5 radi SAMO na Windows-u. Na Mac/Linux se preskace (development/backtest).
+MetaTrader5>=5.0.45 ; platform_system == "Windows"
+anthropic>=0.40
+pydantic>=2
+python-dotenv>=1
