@@ -16,8 +16,10 @@ MT5 naloga na tvoj nalog.
   alatom: prikuplja drivere za zlato (DXY/USD, prinosi, FED, inflacija,
   geopolitika) i vraca strukturisanu odluku + sigurnost + razlog.
 - **Izvrsenje** (`mt5_client.py`, `bot.py`) — otvara/zatvara pozicije na MT5.
-- **Risk** (`risk.py`) — TP 1–3% i SL 0.5–1% **od ukupnog balansa**, plus dnevni
-  limit gubitka i max broj pozicija.
+- **Risk** (`risk.py`) — TP 1–3% i SL 0.5–1% **od ukupnog balansa** uz
+  **auto-skaliranje lota**: SL se postavlja na ATR (volatilnost) razdaljinu, a
+  veličina pozicije se računa tako da taj SL gubi tačno SL% balansa (TP onda
+  donosi TP% balansa). Plus dnevni limit gubitka i max broj pozicija.
 - **Copy trading** (`copier.py`) — kopira pozicije sa MASTER naloga (tudji
   signali, npr. preko investor/read-only logina) na tvoj nalog.
 - **Backtest** (`backtest.py`) — test deterministickog dela strategije na

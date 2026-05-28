@@ -47,10 +47,15 @@ class RiskParams:
     tp_max_pct: float
     sl_min_pct: float
     sl_max_pct: float
-    lot_size: float
+    lot_size: float          # fallback lot kad auto-skaliranje ne moze da racuna
     max_open_positions: int
     max_daily_loss_pct: float
     min_confidence: float
+    auto_lot: bool           # ako True, lot se racuna iz rizika (SL% balansa)
+    atr_period: int          # period za ATR (razdaljina SL-a)
+    atr_sl_mult: float       # SL razdaljina = atr_sl_mult * ATR
+    sl_fallback_pct: float   # ako ATR nije dostupan: SL razdaljina = pct * cena
+    max_lot: float           # gornji limit velicine pozicije (zastita)
 
 
 @dataclass
@@ -113,6 +118,11 @@ def load() -> Config:
             max_open_positions=_i("MAX_OPEN_POSITIONS", 1),
             max_daily_loss_pct=_f("MAX_DAILY_LOSS_PCT", 0.05),
             min_confidence=_f("MIN_CONFIDENCE", 0.6),
+            auto_lot=_b("AUTO_LOT", True),
+            atr_period=_i("ATR_PERIOD", 14),
+            atr_sl_mult=_f("ATR_SL_MULT", 1.5),
+            sl_fallback_pct=_f("SL_FALLBACK_PCT", 0.005),
+            max_lot=_f("MAX_LOT", 1.0),
         ),
         ai=AIConfig(
             enabled=_b("AI_ENABLED", True),

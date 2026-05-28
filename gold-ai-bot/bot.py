@@ -48,7 +48,7 @@ def maybe_trade(client: MT5Client, cfg: config.Config) -> None:
         log.info("Dostignut max broj pozicija (%s). Cekam.", cfg.risk.max_open_positions)
         return
 
-    closes = client.recent_closes(cfg.symbol, "M15", 100)
+    highs, lows, closes = client.recent_rates(cfg.symbol, "M15", 100)
     technical = risk.technical_summary(closes)
     headlines = news.fetch_headlines() if cfg.ai.web_research else []
 
@@ -76,18 +76,24 @@ def maybe_trade(client: MT5Client, cfg: config.Config) -> None:
     sym = client.symbol_info(cfg.symbol)
     tick = client.tick(cfg.symbol)
     entry = tick.ask if signal.direction == "buy" else tick.bid
-    targets = risk.money_targets(balance, cfg.risk, signal.confidence)
-    sl, tp = risk.sl_tp_prices(sym, signal.direction, entry, cfg.risk.lot_size, targets)
+
+    a = risk.atr(highs, lows, closes, cfg.risk.atr_period)
+    sl_distance = a * cfg.risk.atr_sl_mult if a else entry * cfg.risk.sl_fallback_pct
+    plan = risk.plan_trade(sym, signal.direction, entry, balance, cfg.risk, signal.confidence, sl_distance)
 
     client.open_market(
         symbol=cfg.symbol,
         side=signal.direction,
-        volume=cfg.risk.lot_size,
-        sl=sl,
-        tp=tp,
+        volume=plan.volume,
+        sl=plan.sl_price,
+        tp=plan.tp_price,
         comment="ai-signal",
     )
-    log.info("Izvrsen %s @ %.2f | SL %.2f | TP %.2f", signal.direction.upper(), entry, sl, tp)
+    log.info(
+        "Izvrsen %s @ %.2f | lot %.2f | SL %.2f (-%.2f) | TP %.2f (+%.2f)",
+        signal.direction.upper(), entry, plan.volume,
+        plan.sl_price, plan.sl_money, plan.tp_price, plan.tp_money,
+    )
 
 
 def main() -> None:

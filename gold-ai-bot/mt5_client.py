@@ -119,6 +119,17 @@ class MT5Client:
             return []
         return [float(r["close"]) for r in rates]
 
+    def recent_rates(self, symbol: str, timeframe: str = "M15", count: int = 100):
+        """(highs, lows, closes) najstarija -> najnovija; za ATR i indikatore."""
+        tf = getattr(self.mt5, f"TIMEFRAME_{timeframe}")
+        rates = self.mt5.copy_rates_from_pos(symbol, tf, 0, count)
+        if rates is None:
+            return [], [], []
+        highs = [float(r["high"]) for r in rates]
+        lows = [float(r["low"]) for r in rates]
+        closes = [float(r["close"]) for r in rates]
+        return highs, lows, closes
+
     # ---- trgovanje ----
     def _filling(self, symbol: str):
         info = self.symbol_info(symbol)
