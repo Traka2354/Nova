@@ -1722,3 +1722,4 @@ body:not(.lang-hr) .hr { display: none !important; }
 .perf-monthly-label { color: var(--muted); }
 .perf-monthly-value { font-weight: 700; color: var(--text); }
 .perf-monthly-winrate { font-size: 1.1rem; font-weight: 900; color: var(--gold-light); }
+.perf-result__net { display: block; font-size: .75rem; color: var(--muted); margin-top: 2px; }
